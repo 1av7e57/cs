@@ -47,12 +47,12 @@ aritméticas directas con decimales).
 
 Tabla de Resumen de Resultados 
 Operando A	 Operando B	  Tipo del Resultado	 Razón
-int	         int	        int	                 Regla de enteros pequeños
-int	         long	        long	               long es mayor que int
-int	         float	      float	               float es mayor que int
+int	         int	      int	                 Regla de enteros pequeños
+int	         long	      long	                 long es mayor que int
+int	         float	      float	                 float es mayor que int
 int	         double	      double	             double es mayor que float
-float	       double	      Error	               Requiere conversión explícita
-int	         decimal	    decimal	             decimal es el mayor
-float	       decimal	    Error	               Requiere conversión explícita
+float	     double	      Error	                 Requiere conversión explícita
+int	         decimal	  decimal	             decimal es el mayor
+float	     decimal	  Error	                 Requiere conversión explícita
 
 */
