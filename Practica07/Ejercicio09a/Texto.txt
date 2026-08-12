@@ -1,0 +1,4 @@
+﻿Este es un
+texto de ejemplo
+en varias líneas
+para probar el programa.
