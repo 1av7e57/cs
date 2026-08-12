@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Almacen.Aplicacion/Almacen.Aplicacion.csproj" />
+  <Project Path="Almacen.Consola/Almacen.Consola.csproj" />
+  <Project Path="Almacen.Repositorios/Almacen.Repositorios.csproj" />
+</Solution>
