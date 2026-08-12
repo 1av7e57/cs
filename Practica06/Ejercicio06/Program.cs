@@ -165,7 +165,7 @@ Problemas del enfoque inicial:
 Problema	                Descripción	                                                            Consecuencia
 Violación de SRP	        El método Imprimir conocía todos los tipos existentes (A, B, C, D).	    La clase centralizaba lógica que debería estar en cada objeto.
 Violación de Open/Closed	Para agregar una clase E, era obligatorio modificar el método Imprimir.	Alto riesgo de introducir errores al editar código existente.
-Casting Explícito	        Uso de is y as en cada iteración.	                                      Código verboso, lento (verificación de tipo en tiempo de ejecución) y propenso a errores si se olvida un tipo.
+Casting Explícito	        Uso de is y as en cada iteración.	                                    Código verboso, lento (verificación de tipo en tiempo de ejecución) y propenso a errores si se olvida un tipo.
 Pérdida de Tipado	        El array era de object.	                                                El compilador no podía validar métodos; los errores se detectaban solo en tiempo de ejecución.
 Rigidez                     Cada clase tenía su propio método (ImprimirA, ImprimirB).	            No existía una interfaz común; difícil de gestionar en colecciones.
 
