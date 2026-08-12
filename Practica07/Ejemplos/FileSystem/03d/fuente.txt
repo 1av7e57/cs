@@ -1,0 +1,5 @@
+Hola, este es un archivo de prueba.
+Contiene varias líneas de texto.
+C# es un lenguaje muy potente.
+La gestión de archivos es fundamental.
+Esta es la última línea de ejemplo.
