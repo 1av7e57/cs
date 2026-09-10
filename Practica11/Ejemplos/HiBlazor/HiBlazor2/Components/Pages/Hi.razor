@@ -1,0 +1,33 @@
+@*Hi.razor*@
+@*Componente con lógica C#: demuestra interpolación, expresiones y métodos en code*@
+
+@page "/hola"  // Ruta directa (solo aplica al navegar a /hola, no cuando se usa como <Hi />)
+
+<!-- EXPRESIÓN RAZOR #1: acceso a propiedad + método de instancia -->
+<!-- nombre.ToUpper(): toma el campo C# 'nombre' y aplica ToUpper() en tiempo de render -->
+<!-- Resultado visible: "HOLA MATIAS" -->
+<h1>Hola @nombre.ToUpper()</h1>
+
+<p>
+    <!-- EXPRESIÓN RAZOR #2: expresión aritmética inline -->
+    <!-- (5*2) → paréntesis obligatorios para delimitar la expresión; muestra "10" -->
+    El doble de 5 es @(5*2) y la sumatoria de 1 a 100 es
+
+    <!-- EXPRESIÓN RAZOR #3: llamada a método del bloque code -->
+    <!-- @Sumatoria(100) invoca el método local; muestra "5050" -->
+    @Sumatoria(100).
+</p>
+
+@code {
+    // BLOQUE @code: se compila a una clase parcial (Hi.razor.g.cs)
+    // Los campos/métodos aquí son MIEMBROS DE INSTANCIA → cada <Hi /> tiene su propio estado
+
+    // Campo privado: en componentes reales se suele usar [Parameter] o inyectar servicios
+    string nombre = "Matias";
+
+    // Método con expression-bodied member (=>): sintaxis compacta de C#
+    // Enumerable.Range(1, n) genera secuencia 1,2,...,n → .Sum() la totaliza
+    // Para n=100: 100*101/2 = 5050 (fórmula de Gauss, pero aquí se calcula iterativamente)
+    // Requiere el @using System.Linq del _Imports.razor
+    int Sumatoria(int n) => Enumerable.Range(1, n).Sum();
+}
