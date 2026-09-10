@@ -1,0 +1,14 @@
+﻿@*_Imports.razor*@
+@*Archivo de importaciones globales: los 'using' aquí aplican a TODOS los .razor del proyecto*@
+
+@using System.Net.Http                                        @*Cliente HTTP para llamadas a APIs REST*@
+@using System.Net.Http.Json                                   @*Métodos de extensión GetFromJsonAsync/PostAsJsonAsync*@
+@using Microsoft.AspNetCore.Components.Forms                  @*Sistema de formularios y validación de modelos*@
+@using Microsoft.AspNetCore.Components.Routing                @*Enrutamiento SPA (NavLink, LocationChanged)*@
+@using Microsoft.AspNetCore.Components.Web                    @*Eventos y componentes web estándar*@
+@using static Microsoft.AspNetCore.Components.Web.RenderMode  @*Acceso directo a Server/WebAssembly/InteractiveAuto*@
+@using Microsoft.AspNetCore.Components.Web.Virtualization     @*'Virtualize T' para listas de miles de elementos*@
+@using Microsoft.JSInterop                                    @*IJSRuntime para invocar funciones JS desde C#*@
+@using HiBlazor2                                              @*Raíz del proyecto (Modelos, Servicios, etc.)*@
+@using HiBlazor2.Components                                   @*Componentes compartidos del proyecto*@
+@using System.Linq                                            @*LINQ: Range(), Sum(), Where(), etc. (clave en este ejercicio)*@
