@@ -1,0 +1,32 @@
+@* Hi.razor *@
+
+<!-- Ruta directa: también accesible en https://dominio.com/hi como página independiente -->
+@page "/hi"  
+<!-- Modo interactivo: mantiene el estado del componente en memoria del servidor vía SignalR -->
+@rendermode InteractiveServer  
+
+<h1>Listado de personas</h1>
+
+<ul>
+    @foreach (var p in lista)  @* Itera la lista de personas: genera un <li> por cada elemento *@
+    {
+        <li>@p.Apellido, @p.Nombre (@p.Edad)</li>  @* Formato: "Apellido, Nombre (Edad)" *@
+    }
+</ul>
+
+<!-- Formulario simple para agregar nuevas personas a la lista -->
+<input placeholder="Nombre" @bind="nuevo.Nombre" /><br />  @* Two-way binding: sincroniza el campo de texto con nuevo.Nombre *@
+<input placeholder="Apellido" @bind="nuevo.Apellido" /><br />  @* Two-way binding: sincroniza con nuevo.Apellido *@
+<input type="number" placeholder="Edad" @bind="nuevo.Edad" /><br />  @* Input numérico: se enlaza con nuevo.Edad (nullable int) *@
+<button @onclick="Agregar">Agregar</button>  @* Al hacer click, ejecuta el método Agregar() *@
+
+@code {
+    List<Persona> lista = Persona.GetLista();  @* Inicializa la lista con datos de prueba desde el método estático *@
+    Persona nuevo = new Persona();  @* Objeto temporal: almacena los datos del formulario antes de agregarlos a la lista *@
+
+    void Agregar()  @* Método que agrega la persona del formulario a la lista visible *@
+    {
+        lista.Add(nuevo);  @* Inserta el objeto actual en la lista *@
+        nuevo = new Persona();  @* Reinicia el formulario: crea una nueva instancia vacía para el siguiente registro *@
+    }
+}
