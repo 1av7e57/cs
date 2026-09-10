@@ -1,0 +1,32 @@
+@*// Hi.razor *@
+
+<!-- Ruta accesible en https://ejemplo.com/hi (aunque se use dentro de Home) -->
+@page "/hi"  
+@rendermode InteractiveServer  // Activa interactividad completa: el componente mantiene estado en el servidor vía SignalR
+
+@* Evento click vinculado al método ToggleVisible() *@
+<button @onclick="ToggleVisible">   
+    @if (EsVisible)  // Renderizado condicional: muestra "Ocultar" si el contenido está visible 
+    {
+        <span>Ocultar</span>
+    }
+    else  // Si está oculto, el botón cambia a "Mostrar" 
+    {
+        <span>Mostrar</span>
+    }
+</button>
+
+@if (EsVisible)  // Controla visibilidad del contenido: solo se renderiza en DOM si EsVisible == true 
+{
+    <h1>Hola @nombre.ToUpper()</h1>  // Interpolación: convierte el campo 'nombre' a mayúsculas antes de mostrarlo 
+}
+
+@code {
+    string nombre = "Matias";  // Campo privado: valor inicial del nombre mostrado 
+    bool EsVisible = true;     // Estado del componente: true = contenido visible, false = oculto 
+
+    private void ToggleVisible()  // Método invocado por el botón: alterna el estado booleano 
+    {
+        EsVisible = !EsVisible;  // Invierte el valor: true→false o false→true, re-render automático 
+    }
+}
