@@ -1,0 +1,12 @@
+@*Hi.razor*@
+@*Componente reutilizable que puede funcionar como página o como componente hijo*@
+
+<!-- Directiva de enrutamiento: accesible directamente vía /hola -->
+@page "/hola"  
+                        @*Cuando se usa como componente (Hi /), la ruta no aplica*@
+                        @*solo cuando se navega directamente a esa URL*@
+
+<!-- Comentario HTML: se renderiza como comentario en el DOM, no visible al usuario -->
+<!-- veremos en la url cuando lo abramos que esta sera la ruta que indicamos -->
+
+<h1> Hola mundo </h1>  <!-- Contenido estático del componente -->
