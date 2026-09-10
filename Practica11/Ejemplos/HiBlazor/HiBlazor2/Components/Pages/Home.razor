@@ -1,0 +1,16 @@
+﻿@*Home.razor*@
+@*Página de inicio: demuestra que un componente con 'page' puede reutilizarse como etiqueta*@
+
+@page "/"  // Ruta raíz del sitio
+
+<PageTitle>Home</PageTitle>  <!-- Título dinámico de la pestaña (RenderMode-aware) -->
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<!-- Instancia el componente Hi DOS VECES -->
+<!-- Cada <Hi /> ejecuta su propio code: dos variables 'nombre' independientes en memoria -->
+<!-- En Blazor Server esto son dos circuitos/cascos distintos en el mismo render tree -->
+<Hi />
+<Hi />
