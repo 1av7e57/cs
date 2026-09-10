@@ -1,0 +1,15 @@
+﻿@*_Imports.razor*@
+@*Importaciones globales disponibles en todos los componentes .razor del proyecto*@
+
+@using System.Net.Http                                        @*HttpClient: cliente HTTP inyectable para consumir APIs REST*@
+@using System.Net.Http.Json                                   @*Métodos de extensión para serializar/deserializar JSON (GetFromJsonAsync, PostAsJsonAsync)*@
+@using Microsoft.AspNetCore.Components.Forms                  @*Formularios editables: EditForm, DataAnnotationsValidator, validación de modelos*@
+@using Microsoft.AspNetCore.Components.Routing                @*Enrutamiento SPA: Router, RouteView, NavLink, NavigationManager*@
+@using Microsoft.AspNetCore.Components.Web                    @*Eventos de UI (onclick, onchange), HeadOutlet, RenderFragment, componentes web*@
+@using static Microsoft.AspNetCore.Components.Web.RenderMode  @*Importa constantes de renderizado sin prefijo: InteractiveServer, InteractiveWebAssembly, Static*@
+@using Microsoft.AspNetCore.Components.Web.Virtualization     @*Virtualize<T>: renderiza solo los elementos visibles en listas muy largas*@
+@using Microsoft.JSInterop                                    @*IJSRuntime: puente bidireccional C# ↔ JavaScript*@
+@using HiBlazor4                                              @*Namespace raíz: servicios compartidos, Program.cs, configuraciones*@
+@using HiBlazor4.Components                                   @*Componentes locales: permite usar <Hi /> sin prefijo de namespace*@
+@using HiBlazor4.Entidades                                    @*Modelos de dominio: Persona, y futuras entidades de la aplicación*@
+@using System.Linq                                            @*Extensiones LINQ: Where, Select, OrderBy, Sum, Count, etc.*@
