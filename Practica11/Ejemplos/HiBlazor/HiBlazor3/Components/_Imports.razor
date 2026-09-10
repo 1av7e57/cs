@@ -1,0 +1,14 @@
+﻿@*_Imports.razor*@
+@*Importaciones globales compartidas por todos los componentes del proyecto*@
+
+@using System.Net.Http                                        @*HttpClient inyectado para llamadas HTTP*@
+@using System.Net.Http.Json                                   @*Serialización JSON integrada en HttpClient*@
+@using Microsoft.AspNetCore.Components.Forms                  @*Formularios editables y validación de datos*@
+@using Microsoft.AspNetCore.Components.Routing                @*Enrutamiento SPA (NavLink, Router, LocationChanged)*@
+@using Microsoft.AspNetCore.Components.Web                    @*Eventos de ratón/teclado, HeadOutlet, RenderFragment*@
+@using static Microsoft.AspNetCore.Components.Web.RenderMode  @*Permite escribir InteractiveServer sin prefijo*@
+@using Microsoft.AspNetCore.Components.Web.Virtualization     @*Renderizado virtualizado de listas largas*@
+@using Microsoft.JSInterop                                    @*Llamadas bidireccionales a JavaScript (IJSRuntime)*@
+@using HiBlazor3                                              @*Namespace raíz del proyecto*@
+@using HiBlazor3.Components                                   @*Componentes locales del proyecto*@
+@using System.Linq                                            @*Extensiones LINQ (Range, Sum, Where...)*@
