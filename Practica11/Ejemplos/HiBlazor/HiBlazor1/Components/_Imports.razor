@@ -1,0 +1,15 @@
+﻿@*_Imports.razor*@
+@*Este archivo centraliza las directivas using para todo el proyecto*@
+@*Evita repetir imports en cada componente Blazor*@
+
+@using System.Net.Http                                         @*Cliente HTTP para comunicación con APIs*@
+@using System.Net.Http.Json                                    @*Extensiones para serialización JSON en HTTP*@
+@using Microsoft.AspNetCore.Components.Forms                   @*Componentes de formularios (EditForm, InputText, etc.)*@
+@using Microsoft.AspNetCore.Components.Routing                 @*Enrutamiento y navegación (NavLink, Router)*@
+@using Microsoft.AspNetCore.Components.Web                     @*Componentes web básicos (HeadOutlet, etc.)*@
+@using static Microsoft.AspNetCore.Components.Web.RenderMode   @*Modos de renderizado (Server, WebAssembly, Hybrid)*@
+@using Microsoft.AspNetCore.Components.Web.Virtualization      @*Virtualización para listas grandes*@
+@using Microsoft.JSInterop                                     @*Interoperabilidad con JavaScript*@
+@using HiBlazor1                                               @*Namespace raíz del proyecto*@
+@using HiBlazor1.Components                                    @*Namespace de componentes compartidos*@
+@using System.Linq                                             @*Consultas LINQ para colecciones*@
