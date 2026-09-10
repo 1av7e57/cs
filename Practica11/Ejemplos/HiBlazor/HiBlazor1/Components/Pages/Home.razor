@@ -1,0 +1,16 @@
+﻿@*Home.razor*@
+@*Componente de página principal - se renderiza en la ruta raíz "/"*@
+
+<!-- Directiva de enrutamiento: esta página responde a la URL raíz -->
+@page "/"  
+
+<PageTitle>Home</PageTitle>  <!-- Establece el título de la pestaña del navegador -->
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<!-- Renderiza el componente Hi dos veces -->
+<!-- Cada instancia es independiente pero muestra el mismo contenido -->
+<Hi />
+<Hi />
