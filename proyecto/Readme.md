@@ -15,7 +15,7 @@ No necesitas instalar nada extra. Sigue estos pasos sencillos:
 
 1.  **Requisitos previos:** Asegúrate de tener [.NET 8 (o superior)](https://dotnet.microsoft.com/download) instalado en tu computadora.
 2.  **Descarga el código:** Clona este repositorio o descarga los archivos.
-3.  **Abre una terminal** Desde la carpeta raíz /RegistroEmpleados
+3.  **Abre una terminal** Desde la carpeta raíz: /RegistroEmpleados
 4.  **Cambia a la carpeta de ejecución**
     usa el comando:
     ```bash
