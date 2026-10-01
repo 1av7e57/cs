@@ -1,0 +1,49 @@
+﻿@page "/" // Ruta raíz: esta es la página de inicio de la aplicación
+
+<PageTitle>Inicio</PageTitle> <!-- Título en la pestaña del navegador -->
+
+<h1 class="mb-4">Registro de Empleados</h1> <!-- Encabezado principal con margen inferior -->
+
+<!-- Fila Bootstrap con separación entre tarjetas (g-3 = gutter 3) -->
+<div class="row g-3">
+    <!-- Tarjeta 1: acceso a Alta de empleado (azul) -->
+    <div class="col-md-6 col-lg-3"> <!-- 2 columnas en tablets, 4 en escritorio -->
+        <div class="card text-white bg-primary h-100"> <!-- Tarjeta azul que ocupa toda la altura disponible -->
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-person-plus"></i> Alta</h5> <!-- Icono + título -->
+                <p class="card-text">Registrar un nuevo empleado.</p> <!-- Descripción breve -->
+                <a href="empleados/alta" class="btn btn-light btn-sm">Ir</a> <!-- Botón claro pequeño que navega al alta -->
+            </div>
+        </div>
+    </div>
+    <!-- Tarjeta 2: acceso al Listado (verde) -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card text-white bg-success h-100"> <!-- Tarjeta verde -->
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-people"></i> Listado</h5> <!-- Icono de grupo de personas + título -->
+                <p class="card-text">Ver todos los empleados registrados.</p>
+                <a href="empleados" class="btn btn-light btn-sm">Ir</a> <!-- Enlaza directamente a la lista -->
+            </div>
+        </div>
+    </div>
+    <!-- Tarjeta 3: acceso a Modificar (amarillo) -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card text-white bg-warning h-100"> <!-- Tarjeta amarilla -->
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-pencil-square"></i> Modificar</h5> <!-- Icono de lápiz + título -->
+                <p class="card-text">Editar los datos de un empleado.</p>
+                <a href="empleados" class="btn btn-light btn-sm">Ir</a> <!-- Dirige al listado para elegir a quién editar -->
+            </div>
+        </div>
+    </div>
+    <!-- Tarjeta 4: acceso a Eliminar (rojo) -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card text-white bg-danger h-100"> <!-- Tarjeta roja indicando acción destructiva -->
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-trash3"></i> Eliminar</h5> <!-- Icono de papelera + título -->
+                <p class="card-text">Dar de baja a un empleado.</p>
+                <a href="empleados" class="btn btn-light btn-sm">Ir</a> <!-- Dirige al listado para elegir a quién eliminar -->
+            </div>
+        </div>
+    </div>
+</div>
