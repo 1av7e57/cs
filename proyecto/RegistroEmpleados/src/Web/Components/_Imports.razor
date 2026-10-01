@@ -1,0 +1,15 @@
+﻿@using System.Net.Http @* Namespace base para operaciones HTTP (útil para Blazor WebAssembly/Server) *@
+@using System.Net.Http.Json @* Extensiones para serialización JSON en peticiones HTTP *@
+@using Microsoft.AspNetCore.Components.Forms @* Controles de formulario validado (InputText, InputNumber, EditForm, etc.) *@
+@using Microsoft.AspNetCore.Components.Routing @* Funcionalidades de enrutamiento (NavigationManager, Router, etc.) *@
+@using Microsoft.AspNetCore.Components.Web @* Componentes web comunes (HeadOutlet, Body, Favicon, etc.) *@
+@using static Microsoft.AspNetCore.Components.Web.RenderMode @* Alias para usar RenderMode sin prefijo (ej: Server, WebAssembly) *@
+@using Microsoft.AspNetCore.Components.Web.Virtualization @* Componentes de virtualización para listas grandes (Virtualize<T>) *@
+@using Microsoft.JSInterop @* Interoperabilidad con JavaScript (JSRuntime, IJSRuntime) *@
+@using Web @* Namespace raíz del proyecto Web (para componentes y clases del mismo)*@
+@using Web.Components @* Namespace de componentes compartidos dentro de la capa Web *@
+@using Web.Components.Layout @* Namespace del layout principal (MainLayout.razor) *@
+
+// --- Agregados para el CRUD de empleados ---
+@using Dominio @* Acceso a la entidad Empleado y otras entidades de dominio *@
+@using Aplicacion @* Acceso al servicio ServicioEmpleados e interfaz IRepositorioEmpleados *@
