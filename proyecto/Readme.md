@@ -27,7 +27,7 @@ No necesitas instalar nada extra. Sigue estos pasos sencillos:
     dotnet run --project src/Web
     ```
 8.  **Abre la página en navegador:**
-9.  La aplicación iniciará automáticamente en `http://localhost:5000` (o la dirección que te muestre la terminal).
-10.  **¡Listo!** Ya puedes empezar a registrar empleados.
+    La aplicación iniciará automáticamente en `http://localhost:5000` (o la dirección que te muestre la terminal).
+9.  **¡Listo!** Ya puedes empezar a registrar empleados.
 
 > **Nota:** Si no descargaste la base de datos (empleados.db), una nueva se creará automáticamente desde cero la primera vez que ejecutes el programa.
