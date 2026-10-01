@@ -1,0 +1,36 @@
+<!-- Barra superior del menú lateral: marca de la aplicación -->
+<div class="top-row ps-3 navbar navbar-dark"> <!-- Navbar oscura con padding izquierdo (ps-3) -->
+    <div class="container-fluid"> <!-- Contenedor fluido para el contenido de la barra -->
+        <a class="navbar-brand" href="">Registro Empleados</a> <!-- Enlace a la raíz con estilo de marca -->
+    </div>
+</div>
+
+<!-- Zona de navegación desplazable verticalmente -->
+<div class="nav-scrollable">
+    <nav class="flex-column"> <!-- Navegación en columna vertical (estilo sidebar) -->
+        <!-- Enlace 1: Inicio -->
+        <div class="nav-item px-3"> <!-- Elemento de navegación con padding horizontal -->
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All"> <!-- NavLink resalta automáticamente la ruta activa -->
+                <span class="bi bi-house-door"></span> Inicio <!-- Icono de casa + texto -->
+            </NavLink>
+        </div>
+        <!-- Enlace 2: Lista de empleados -->
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="empleados" Match="NavLinkMatch.All"> <!-- Match=All exige coincidencia exacta de URL -->
+                <span class="bi bi-people"></span> Lista de Empleados <!-- Icono de grupo + texto -->
+            </NavLink>
+        </div>
+        <!-- Enlace 3: Alta de empleado -->
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="empleados/alta" Match="NavLinkMatch.All">
+                <span class="bi bi-person-plus"></span> Alta de Empleado <!-- Icono de persona + texto -->
+            </NavLink>
+        </div>
+        <!-- Enlace 4: Eliminar empleado -->
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="empleados/eliminar" Match="NavLinkMatch.All">
+                <span class="bi bi-trash3"></span> Eliminar Empleado <!-- Icono de papelera + texto -->
+            </NavLink>
+        </div>
+    </nav>
+</div>

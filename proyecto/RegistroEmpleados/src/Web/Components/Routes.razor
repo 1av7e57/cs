@@ -1,0 +1,12 @@
+﻿<!-- Router: componente que gestiona el enrutamiento entre páginas -->
+<Router AppAssembly="@typeof(App).Assembly"> <!-- Escanea este ensamblado para encontrar todas las rutas page -->
+    <Found Context="routeData"> <!-- Se ejecuta cuando se encuentra una ruta válida -->
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" /> <!-- Renderiza la página con MainLayout como layout por defecto -->
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" /> <!-- Mueve el foco al primer <h1> de la página (accesibilidad) -->
+    </Found>
+    <NotFound> <!-- Se ejecuta cuando no hay ninguna página que coincida con la URL -->
+        <LayoutView Layout="@typeof(MainLayout)"> <!-- Aplica MainLayout también a la vista 404 -->
+            <p role="alert">Lo siento, no hay nada en esta página.</p> <!-- Mensaje amigable para rutas inexistentes -->
+        </LayoutView>
+    </NotFound>
+</Router>
