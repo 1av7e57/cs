@@ -1,0 +1,136 @@
+@page "/empleados/eliminar" // Ruta base sin parámetro: formulario manual de baja por ID
+@page "/empleados/eliminar/{Id:int}" // Ruta con parámetro opcional: precarga el ID desde la URL (viene del detalle)
+@inject ServicioEmpleados Servicio // Inyección del servicio para consultar y eliminar empleados
+@inject NavigationManager NavigationManager // Inyección del gestor de navegación
+
+<PageTitle>Eliminar Empleado</PageTitle> <!-- Título en la pestaña del navegador -->
+
+<h1 class="mb-4">Eliminar Empleado</h1> <!-- Encabezado principal -->
+
+<!-- Tarjeta Bootstrap que contiene el flujo de eliminación, limitada a 500px de ancho -->
+<div class="card" style="max-width: 500px;">
+    <div class="card-header bg-danger text-white"> <!-- Cabecera roja indicando acción destructiva -->
+        <i class="bi bi-trash3"></i> Dar de baja a un empleado <!-- Icono de papelera + texto -->
+    </div>
+    <div class="card-body"> <!-- Cuerpo de la tarjeta con el contenido condicional -->
+
+        @* Estado 1: eliminación realizada correctamente *@
+
+        @if (!string.IsNullOrEmpty(_mensajeExito))
+        {
+            <div class="alert alert-success">@_mensajeExito</div> <!-- Alerta verde de confirmación -->
+            <a class="btn btn-secondary mt-2" href="empleados"> <!-- Enlace para volver al listado tras el éxito -->
+                <i class="bi bi-arrow-left"></i> Volver al listado
+            </a>
+        }
+        
+        @* Estado 2: error durante el proceso *@
+
+        else if (!string.IsNullOrEmpty(_mensajeError))
+        {
+            <div class="alert alert-danger">@_mensajeError</div> <!-- Alerta roja con el mensaje de error -->
+        }
+
+        @* Estado 3: formulario de solicitud de baja *@
+
+        else
+        {
+            <!-- Formulario validado: OnValidSubmit se ejecuta solo si la validación pasa -->
+            <EditForm EditContext="@editContext" OnValidSubmit="@HandleValidSubmit">
+                <div class="mb-3"> <!-- Campo ID del empleado a eliminar -->
+                    <label for="id" class="form-label">ID del empleado a eliminar</label>
+                    <InputNumber @bind-Value="modelo.Id" id="id" class="form-control" /> <!-- Entrada numérica enlazada al modelo -->
+                </div>
+
+                <!-- Vista previa: muestra quién es el empleado antes de confirmar la baja -->
+                @if (_empleado is not null)
+                {
+                    <div class="alert alert-warning"> <!-- Alerta amarilla de confirmación visual -->
+                        <strong>Empleado #@modelo.Id:</strong> @_empleado.NombreCompleto <!-- Nombre completo calculado por la entidad -->
+                    </div>
+                }
+
+                <!-- Mensaje de validación del campo ID cuando el valor es inválido -->
+                <ValidationMessage For="@(() => modelo.Id)" class="text-danger" />
+
+                <!-- Botonera: submit habilitado salvo durante el procesamiento -->
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-danger" disabled="@_procesando"> <!-- Deshabilitado mientras se procesa -->
+                        <i class="bi bi-trash3"></i> Eliminar
+                    </button>
+                    <a class="btn btn-secondary" href="empleados"> <!-- Enlace de cancelación hacia la lista -->
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </a>
+                </div>
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    private SolicitudEliminacion modelo = new(); // Instancia del modelo interno del formulario
+    [Parameter] public int? Id { get; set; } // Parámetro de ruta opcional (nullable: admite ambas rutas declaradas arriba)
+    private EditContext? editContext; // Contexto de edición que gestiona el estado y la validación
+    private bool _procesando = false; // Bandera anti doble-submit: bloquea el botón mientras se procesa
+
+    private string? _mensajeExito = null; // Mensaje de éxito mostrado en alerta verde
+    private string? _mensajeError = null; // Mensaje de error mostrado en alerta roja
+    private Empleado? _empleado = null; // Empleado cargado para la vista previa de confirmación
+
+    // Ciclo de vida: precarga el ID y sus datos si llegaron por la URL
+    protected override void OnInitialized()
+    {
+        if (Id.HasValue) // Si la ruta incluía /{Id:int}
+        {
+            modelo.Id = Id.Value; // Precarga el ID en el formulario
+            _empleado = Servicio.ObtenerPorId(Id.Value); // Carga los datos para mostrar la vista previa
+        }
+        editContext = new EditContext(modelo); // Crea el contexto asociado al modelo
+    }
+
+    // Se ejecuta cuando el formulario pasa la validación y se envía
+    private void HandleValidSubmit()
+    {
+        if (_procesando) return; // Guarda: evita envíos duplicados si ya hay uno en curso
+        _procesando = true; // Marca el inicio del procesamiento
+
+        try
+        {
+            // Primero verificar si existe
+            _empleado = Servicio.ObtenerPorId(modelo.Id); // Consulta previa para validar existencia
+            if (_empleado is null)
+            {
+                _mensajeError = $"No existe empleado con ID {modelo.Id}"; // Error amigable si no existe
+                _procesando = false;
+                StateHasChanged(); // Fuerza repintado para mostrar el error
+                return; // Aborta la operación antes de intentar eliminar
+            }
+
+            // Eliminar
+            Servicio.EliminarEmpleado(modelo.Id); // Delega la baja al servicio de aplicación
+
+            _mensajeExito = $"Empleado '{_empleado.NombreCompleto}' eliminado correctamente."; // Confirmación con el nombre borrado
+            _mensajeError = null; // Limpia cualquier error anterior
+            modelo = new SolicitudEliminacion(); // Resetea el formulario
+            editContext = new EditContext(modelo); // Recrea el contexto con el modelo limpio
+            _empleado = null; // Limpia la vista previa
+            StateHasChanged(); // Fuerza repintado inmediato para mostrar el mensaje de éxito
+        }
+        catch (Exception ex)
+        {
+            _mensajeError = $"Error inesperado: {ex.Message}"; // Captura de errores no previstos
+            _mensajeExito = null;
+        }
+        finally
+        {
+            _procesando = false; // Libera la bandera: permite nuevos envíos
+        }
+    }
+
+    /* Modelo interno del formulario (DTO): solo transporta el ID a eliminar,
+       separando los datos de entrada de la UI respecto a la entidad de Dominio. */
+    private class SolicitudEliminacion
+    {
+        public int Id { get; set; }
+    }
+}

@@ -1,0 +1,158 @@
+@page "/empleados/alta" // Ruta URL que activa esta página
+@inject ServicioEmpleados Servicio // Inyección del servicio de aplicación para registrar empleados
+@inject NavigationManager NavigationManager // Inyección del gestor de navegación para redirigir tras el alta
+
+<PageTitle>Alta de Empleado</PageTitle> <!-- Título mostrado en la pestaña del navegador -->
+
+<h1 class="mb-4">Alta de Empleado</h1> <!-- Encabezado principal con margen inferior -->
+
+<!-- Tarjeta Bootstrap que contiene el formulario, limitada a 500px de ancho -->
+<div class="card" style="max-width: 500px;">
+    <div class="card-header bg-primary text-white"> <!-- Cabecera azul de la tarjeta -->
+        <i class="bi bi-person-plus"></i> Registrar nuevo empleado <!-- Icono de Bootstrap Icons + texto -->
+    </div>
+    <div class="card-body"> <!-- Cuerpo de la tarjeta con el contenido del formulario -->
+
+        <!-- Mensaje de éxito: solo visible si _mensajeExito tiene contenido -->
+        @if (!string.IsNullOrEmpty(_mensajeExito))
+        {
+            <div class="alert alert-success">@_mensajeExito</div> <!-- Alerta verde de confirmación -->
+        }
+
+        <!-- Mensaje de error: solo visible si _mensajeError tiene contenido -->
+        @if (!string.IsNullOrEmpty(_mensajeError))
+        {
+            <div class="alert alert-danger">@_mensajeError</div> <!-- Alerta roja de error -->
+        }
+
+        <!-- Formulario validado: OnValidSubmit se ejecuta solo si la validación pasa -->
+        <EditForm EditContext="@editContext" OnValidSubmit="@HandleValidSubmit">
+            <div class="mb-3"> <!-- Campo Nombre -->
+                <label for="nombre" class="form-label">Nombre</label>
+                <InputText @bind-Value="modelo.Nombre" id="nombre" class="form-control" /> <!-- Enlace bidireccional al modelo -->
+            </div>
+
+            <div class="mb-3"> <!-- Campo Apellido -->
+                <label for="apellido" class="form-label">Apellido</label>
+                <InputText @bind-Value="modelo.Apellido" id="apellido" class="form-control" />
+            </div>
+
+            <div class="mb-3"> <!-- Campo Edad (control numérico) -->
+                <label for="edad" class="form-label">Edad</label>
+                <InputNumber @bind-Value="modelo.Edad" id="edad" class="form-control" /> <!-- InputNumber valida formato numérico -->
+            </div>
+
+            <div class="mb-3"> <!-- Campo Dirección -->
+                <label for="direccion" class="form-label">Dirección</label>
+                <InputText @bind-Value="modelo.Direccion" id="direccion" class="form-control" />
+            </div>
+
+            <div class="mb-3"> <!-- Campo Sexo (grupo de radio botones) -->
+                <label class="form-label">Sexo</label>
+                <InputRadioGroup @bind-Value="modelo.Sexo"> <!-- Agrupa los radios y enlaza el valor seleccionado -->
+                    <div class="form-check form-check-inline">
+                        <InputRadio Value="@_m" class="form-check-input" id="sexo_m" /> <!-- Opción Masculino -->
+                        <label class="form-check-label" for="sexo_m">Masculino</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <InputRadio Value="@_f" class="form-check-input" id="sexo_f" /> <!-- Opción Femenino -->
+                        <label class="form-check-label" for="sexo_f">Femenino</label>
+                    </div>
+                </InputRadioGroup>
+            </div>
+
+            <!-- Muestra mensajes de validación por campo cuando el valor es inválido -->
+            <ValidationMessage For="@(() => modelo.Nombre)" class="text-danger" />
+            <ValidationMessage For="@(() => modelo.Apellido)" class="text-danger" />
+            <ValidationMessage For="@(() => modelo.Edad)" class="text-danger" />
+            <ValidationMessage For="@(() => modelo.Direccion)" class="text-danger" />
+
+            <!-- Botonera: submit habilitado salvo durante el procesamiento -->
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-success" disabled="@_procesando"> <!-- Deshabilitado mientras se guarda -->
+                    <i class="bi bi-check-lg"></i> Registrar
+                </button>
+                <a class="btn btn-secondary" href="empleados"> <!-- Enlace de cancelación hacia la lista -->
+                    <i class="bi bi-x-lg"></i> Cancelar
+                </a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private DatosEmpleadoFormulario modelo = new(); // Instancia del modelo interno del formulario
+    private EditContext? editContext; // Contexto de edición que gestiona el estado y la validación
+    private bool _procesando = false; // Bandera anti doble-submit: bloquea el botón mientras se procesa
+
+    private const string _m = "M"; // Valor constante para la opción Masculino
+    private const string _f = "F"; // Valor constante para la opción Femenino
+
+    private string? _mensajeExito = null; // Mensaje de éxito mostrado en alerta verde
+    private string? _mensajeError = null; // Mensaje de error mostrado en alerta roja
+
+    // Ciclo de vida: se ejecuta al inicializar el componente
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(modelo); // Crea el contexto asociado al modelo del formulario
+    }
+
+    // Se ejecuta cuando el formulario pasa la validación y se envía
+    private void HandleValidSubmit()
+    {
+        if (_procesando) return; // Guarda: evita envíos duplicados si ya hay uno en curso
+        _procesando = true; // Marca el inicio del procesamiento
+
+        try
+        {
+            /* Llama al servicio de aplicación aplicando las reglas de negocio.
+               Sexo[0] convierte el string del radio ("M"/"F") en char, como espera el servicio. */
+            Servicio.RegistrarEmpleado(
+                modelo.Nombre,
+                modelo.Apellido,
+                modelo.Edad,
+                modelo.Direccion,
+                modelo.Sexo[0]
+            );
+
+            _mensajeExito = "Empleado registrado correctamente."; // Confirmación visual al usuario
+            _mensajeError = null; // Limpia cualquier error anterior
+            modelo = new DatosEmpleadoFormulario(); // Resetea el formulario a valores por defecto
+            editContext = new EditContext(modelo); // Recrea el contexto con el modelo limpio
+
+            StateHasChanged(); // Fuerza un repintado inmediato para mostrar el mensaje de éxito
+
+            // Redirigir después de un breve delay
+            InvokeAsync(async () =>
+            {
+                await Task.Delay(1500); // Espera 1,5 s para que el usuario vea la confirmación
+                NavigationManager.NavigateTo("empleados"); // Navega a la lista de empleados
+            });
+        }
+        catch (ArgumentException ex)
+        {
+            _mensajeError = ex.Message; // Muestra el mensaje amigable de la regla de negocio incumplida
+            _mensajeExito = null;
+        }
+        catch (Exception ex)
+        {
+            _mensajeError = $"Error inesperado: {ex.Message}"; // Captura de errores no previstos
+            _mensajeExito = null;
+        }
+        finally
+        {
+            _procesando = false; // Libera la bandera: permite nuevos envíos
+        }
+    }
+
+    /* Modelo interno del formulario (DTO): separa los datos de entrada de la UI
+       respecto a la entidad de Dominio, respetando la separación de capas. */
+    private class DatosEmpleadoFormulario
+    {
+        public string Nombre { get; set; } = "";
+        public string Apellido { get; set; } = "";
+        public int Edad { get; set; }
+        public string Direccion { get; set; } = "";
+        public string Sexo { get; set; } = "M"; // Valor por defecto: Masculino preseleccionado
+    }
+}

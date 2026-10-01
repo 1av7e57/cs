@@ -1,0 +1,173 @@
+@page "/empleados/editar/{Id:int}" // Ruta con parámetro de ruta obligatorio de tipo integer
+@inject ServicioEmpleados Servicio // Inyección del servicio para cargar y modificar empleados
+@inject NavigationManager NavigationManager // Inyección del gestor de navegación para redirigir tras guardar
+
+<PageTitle>Editar Empleado</PageTitle> <!-- Título en la pestaña del navegador -->
+
+<h1 class="mb-4">Editar Empleado</h1> <!-- Encabezado principal -->
+
+<!-- Lógica condicional: muestra formulario si el empleado existe, alerta si no -->
+@if (_empleado is null)
+{
+    <div class="alert alert-warning">No se encontró un empleado con el ID @Id.</div> <!-- Alerta amarilla si no existe -->
+    <a class="btn btn-secondary" href="empleados"> <!-- Enlace de vuelta al listado -->
+        <i class="bi bi-arrow-left"></i> Volver al listado
+    </a>
+}
+else
+{
+    <div class="card" style="max-width: 500px;"> <!-- Tarjeta que contiene el formulario de edición -->
+        <div class="card-header bg-warning text-dark"> <!-- Cabecera amarilla indicando modo edición -->
+            <i class="bi bi-pencil-square"></i> Modificar empleado #@_empleado.Id
+        </div>
+        <div class="card-body"> <!-- Cuerpo de la tarjeta con el formulario -->
+
+            <!-- Mensaje de error: solo visible si _mensajeError tiene contenido -->
+            @if (!string.IsNullOrEmpty(_mensajeError))
+            {
+                <div class="alert alert-danger">@_mensajeError</div> <!-- Alerta roja de error -->
+            }
+
+            <!-- Formulario validado: OnValidSubmit se ejecuta solo si la validación pasa -->
+            <EditForm EditContext="@editContext" OnValidSubmit="@HandleValidSubmit">
+                <div class="mb-3"> <!-- Campo Nombre -->
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <InputText @bind-Value="modelo.Nombre" id="nombre" class="form-control" /> <!-- Enlace bidireccional al modelo -->
+                </div>
+
+                <div class="mb-3"> <!-- Campo Apellido -->
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <InputText @bind-Value="modelo.Apellido" id="apellido" class="form-control" />
+                </div>
+
+                <div class="mb-3"> <!-- Campo Edad (control numérico) -->
+                    <label for="edad" class="form-label">Edad</label>
+                    <InputNumber @bind-Value="modelo.Edad" id="edad" class="form-control" /> <!-- InputNumber valida formato numérico -->
+                </div>
+
+                <div class="mb-3"> <!-- Campo Dirección -->
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <InputText @bind-Value="modelo.Direccion" id="direccion" class="form-control" />
+                </div>
+
+                <div class="mb-3"> <!-- Campo Sexo (grupo de radio botones) -->
+                    <label class="form-label">Sexo</label>
+                    <div> <!-- Contenedor adicional para alineación -->
+                        <InputRadioGroup @bind-Value="modelo.Sexo"> <!-- Agrupa los radios y enlaza el valor seleccionado -->
+                            <div class="form-check form-check-inline">
+                                <InputRadio Value="@_m" class="form-check-input" id="sexo_m" /> <!-- Opción Masculino -->
+                                <label class="form-check-label" for="sexo_m">Masculino</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <InputRadio Value="@_f" class="form-check-input" id="sexo_f" /> <!-- Opción Femenino -->
+                                <label class="form-check-label" for="sexo_f">Femenino</label>
+                            </div>
+                        </InputRadioGroup>
+                    </div>
+                </div>
+
+                <!-- Muestra mensajes de validación por campo cuando el valor es inválido -->
+                <ValidationMessage For="@(() => modelo.Nombre)" class="text-danger" />
+                <ValidationMessage For="@(() => modelo.Apellido)" class="text-danger" />
+                <ValidationMessage For="@(() => modelo.Edad)" class="text-danger" />
+                <ValidationMessage For="@(() => modelo.Direccion)" class="text-danger" />
+
+                <!-- Botonera: submit habilitado salvo durante el procesamiento -->
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-warning" disabled="@_procesando"> <!-- Deshabilitado mientras se guarda -->
+                        <i class="bi bi-check-lg"></i> Guardar cambios
+                    </button>
+                    <a class="btn btn-secondary" href="empleados/detalle/@Id"> <!-- Cancelar vuelve al detalle sin guardar -->
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </a>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; } // Recibe el parámetro de la URL
+    private Empleado? _empleado; // Variable para almacenar el empleado encontrado
+    private DatosEmpleadoFormulario modelo = new(); // Instancia del modelo interno del formulario
+    private EditContext? editContext; // Contexto de edición que gestiona el estado y la validación
+    private bool _procesando = false; // Bandera anti doble-submit: bloquea el botón mientras se procesa
+
+    private string? _mensajeError = null; // Mensaje de error mostrado en alerta roja
+
+    private const string _m = "M"; // Valor constante para la opción Masculino
+    private const string _f = "F"; // Valor constante para la opción Femenino
+
+    // Ciclo de vida: carga el empleado y precarga el formulario con sus datos actuales
+    protected override void OnInitialized()
+    {
+        _empleado = Servicio.ObtenerPorId(Id); // Obtiene el empleado desde el servicio
+        if (_empleado is not null) // Si existe, precarga el formulario con sus datos actuales
+        {
+            modelo = new DatosEmpleadoFormulario
+            {
+                Nombre = _empleado.Nombre,
+                Apellido = _empleado.Apellido,
+                Edad = _empleado.Edad,
+                Direccion = _empleado.Direccion,
+                Sexo = _empleado.Sexo.ToString() // Convierte char a string para el control de radio
+            };
+            editContext = new EditContext(modelo); // Crea el contexto asociado al modelo cargado
+        }
+    }
+
+    // Se ejecuta cuando el formulario pasa la validación y se envía
+    private void HandleValidSubmit()
+    {
+        if (_procesando) return; // Guarda: evita envíos duplicados si ya hay uno en curso
+        _procesando = true; // Marca el inicio del procesamiento
+
+        try
+        {
+            /* Llama al servicio de aplicación aplicando las reglas de negocio.
+               Sexo[0] convierte el string del radio ("M"/"F") en char, como espera el servicio. */
+            Servicio.ModificarEmpleado(
+                Id,
+                modelo.Nombre,
+                modelo.Apellido,
+                modelo.Edad,
+                modelo.Direccion,
+                modelo.Sexo[0]
+            );
+
+            // Redirigir al detalle tras éxito
+            InvokeAsync(async () =>
+            {
+                await Task.Delay(500); // Espera breve para mostrar confirmación visual
+                NavigationManager.NavigateTo($"empleados/detalle/{Id}"); // Navega al detalle actualizado
+            });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _mensajeError = ex.Message; // Error específico: empleado no encontrado
+        }
+        catch (ArgumentException ex)
+        {
+            _mensajeError = ex.Message; // Error de validación de reglas de negocio
+        }
+        catch (Exception ex)
+        {
+            _mensajeError = $"Error inesperado: {ex.Message}"; // Captura de errores no previstos
+        }
+        finally
+        {
+            _procesando = false; // Libera la bandera: permite nuevos envíos
+        }
+    }
+
+    /* Modelo interno del formulario (DTO): separa los datos de entrada de la UI
+       respecto a la entidad de Dominio, respetando la separación de capas. */
+    private class DatosEmpleadoFormulario
+    {
+        public string Nombre { get; set; } = "";
+        public string Apellido { get; set; } = "";
+        public int Edad { get; set; }
+        public string Direccion { get; set; } = "";
+        public string Sexo { get; set; } = "M"; // Valor por defecto: Masculino preseleccionado
+    }
+}

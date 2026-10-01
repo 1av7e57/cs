@@ -1,0 +1,83 @@
+@page "/empleados" // Ruta URL que activa esta página
+@inject ServicioEmpleados Servicio // Inyección del servicio para obtener la lista de empleados
+
+<PageTitle>Lista de Empleados</PageTitle> <!-- Título en la pestaña del navegador -->
+
+<h1 class="mb-4">Empleados Registrados</h1> <!-- Encabezado principal -->
+
+@* Estado de carga: spinner visible mientras se obtienen los datos *@
+
+@if (_cargando)
+{
+    @* Spinner Bootstrap + texto de carga *@
+    
+    <div class="text-muted"><span class="spinner-border spinner-border-sm"></span> Cargando...</div>
+}
+
+@*Estado vacío: no hay registros en la base de datos*@
+
+else if (_empleados.Count == 0)
+{
+    <div class="alert alert-info">No hay empleados registrados.</div> <!-- Alerta azul informativa -->
+}
+
+@*Estado con datos: muestra la tabla con los empleados*@
+
+else
+{
+    <div class="table-responsive"> <!-- Contenedor con scroll horizontal en pantallas pequeñas -->
+        <!-- Tabla Bootstrap con estilos de filas alternas y hover -->
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark"> <!-- Cabecera oscura con los encabezados de columna -->
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Edad</th>
+                    <th>Dirección</th>
+                    <th>Sexo</th>
+                    <th class="text-end">Acciones</th> <!-- Columna de acciones alineada a la derecha -->
+                </tr>
+            </thead>
+            <tbody> <!-- Cuerpo de la tabla con los datos -->
+                @foreach (var e in _empleados) // Itera sobre cada empleado de la lista
+                {
+                    <tr> <!-- Fila individual -->
+                        <td>@e.Id</td>
+                        <td>@e.Nombre</td>
+                        <td>@e.Apellido</td>
+                        <td>@e.Edad</td>
+                        <td>@e.Direccion</td>
+                        <td>@e.Sexo</td>
+                        <!-- Botón "Ver" que enlaza al detalle del empleado -->
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" href="empleados/detalle/@e.Id">
+                                <i class="bi bi-eye"></i> Ver <!-- Icono de ojo + texto -->
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-muted">Total: @_empleados.Count empleado(s)</p> <!-- Contador de registros -->
+}
+
+<!-- Botón flotante para crear un nuevo empleado -->
+
+<a class="btn btn-primary" href="empleados/alta">
+    <i class="bi bi-person-plus"></i> Nuevo empleado <!-- Icono de persona + texto -->
+</a>
+
+@code {
+    private List<Empleado> _empleados = new(); // Lista que almacena los empleados desde el servicio
+    private bool _cargando = true; // Indicador de estado de carga inicial en true
+
+    // Ciclo de vida: carga los datos al inicializar el componente
+    protected override void OnInitialized()
+    {
+        _empleados = Servicio.ListarTodos(); // Obtiene la lista completa desde el servicio
+        _cargando = false; // Marca la carga como completada para mostrar la tabla
+    }
+}
