@@ -1,0 +1,17 @@
+﻿@inherits LayoutComponentBase // Hereda de LayoutComponentBase para acceder a la propiedad @Body
+
+<!-- Layout principal: estructura de dos columnas con Bootstrap -->
+<div class="container-fluid"> <!-- Contenedor fluido que ocupa todo el ancho -->
+    <div class="row"> <!-- Fila Bootstrap para la disposición en columnas -->
+        <!-- Columna lateral izquierda: menú de navegación, colapsable en móviles -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar-collapse p-0">
+            <NavMenu /> <!-- Componente que renderiza el menú de navegación -->
+        </nav>
+
+        <!-- Columna principal: contenido dinámico de cada página -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            @* Punto de inserción: Blazor inyecta el contenido de cada página aquí *@
+            @Body 
+        </main>
+    </div>
+</div>
