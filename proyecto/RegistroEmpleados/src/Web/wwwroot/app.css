@@ -1,0 +1,36 @@
+/* Reset base: tipografía y altura completa del viewport */
+html, body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif; /* Tipografía principal de la app */
+    height: 100%; /* Ocupa todo el alto de la ventana */
+}
+
+/* Sidebar: fondo oscuro y altura mínima igual al viewport */
+.sidebar-collapse {
+    background-color: #1e2a38; /* Color oscuro personalizado para la barra lateral */
+    min-height: 100vh; /* Asegura que ocupe al menos toda la altura visible */
+}
+
+/* Marca en la barra superior: blanco y negrita */
+.navbar-brand {
+    color: #fff !important; /* Fuerza color blanco sobre el fondo oscuro */
+    font-weight: 600; /* Peso de fuente semi-bold para destacar */
+}
+
+/* Enlaces de navegación en la sidebar: color semitransparente con bordes redondeados */
+.nav-scrollable .nav-link {
+    color: rgba(255, 255, 255, 0.75); /* Blanco al 75% de opacidad para estado normal */
+    border-radius: 0.35rem; /* Bordes redondeados para cada enlace */
+    margin: 0.15rem 0.5rem; /* Espaciado vertical y horizontal entre enlaces */
+}
+
+/* Estado hover: enlaces se iluminan al pasar el cursor */
+.nav-scrollable .nav-link:hover {
+    color: #fff; /* Blanco completo al pasar el mouse */
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo semitransparente sutil */
+}
+
+/* Estado activo: enlace de la página actual resaltado en azul Bootstrap */
+.nav-scrollable .nav-link.active {
+    color: #fff; /* Blanco para contraste sobre fondo azul */
+    background-color: #0d6efd; /* Azul primario de Bootstrap como indicador de página activa */
+}
